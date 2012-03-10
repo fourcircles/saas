@@ -1,4 +1,9 @@
 class MoviesController < ApplicationController
+  def initialize()
+    super
+    @table_classes = {}
+  end
+
 
   def show
     id = params[:id] # retrieve movie ID from URI route
@@ -7,7 +12,18 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    @movies = Movie.order(params[:sort]).all
+    @table_classes[params[:sort]] = 'hilite' if params[:sort]
+    # @title_class = @release_class = nil
+    # if params[:sort] == 'title' then
+    #   @movies.sort! {|x, y| x.title.to_s <=> y.title.to_s}
+    #   @title_class = 'hilite'
+    # end
+    # if params[:sort] == 'release_date' then
+    #   @movies.sort! {|x, y| x.release_date <=> y.release_date}
+    #   @release_class = 'hilite'
+    # end
+
   end
 
   def new
