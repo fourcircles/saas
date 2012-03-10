@@ -8,7 +8,7 @@
       - @all_ratings.each do |rating|
         = rating
         = check_box_tag "ratings[#{rating}]", '', @check_boxes[rating],
-        :id => "rating_#{rating}"
+        :id => "ratings_#{rating}"
       = submit_tag('Refresh', {"id" => 'ratings_submit', :sort => "title"})
     %tr
       %th{"class" => @table_classes['title']}= link_to "Movie Title", movies_path(@params.update :sort => 'title'), :id => 'title_header'
