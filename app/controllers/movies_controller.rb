@@ -1,7 +1,10 @@
 class MoviesController < ApplicationController
   def initialize()
     super
+    @all_ratings = Movie::ratings
     @table_classes = {}
+    @check_boxes = {}
+    @params = {}
   end
 
 
@@ -12,7 +15,19 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.order(params[:sort]).all
+    @params = params
+
+    Movie::ratings.each {|x|
+      @check_boxes[x] = params[:ratings] && params[:ratings].keys.include?(x)
+    }
+
+
+    @movies = unless params[:ratings] then
+      Movie.order(params[:sort])
+    else
+      Movie.where(:rating => params[:ratings].keys).order(params[:sort])
+    end
+
     @table_classes[params[:sort]] = 'hilite' if params[:sort]
     # @title_class = @release_class = nil
     # if params[:sort] == 'title' then
