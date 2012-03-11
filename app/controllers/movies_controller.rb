@@ -15,6 +15,19 @@ class MoviesController < ApplicationController
   end
 
   def index
+    if params.has_key?("commit") then
+      case params[:commit]
+      when 'Refresh' then
+        session[:ratings] = params[:ratings]
+      when 'Sort' then session[:sort] = params[:sort]
+      end
+    else
+      params[:sort] = session[:sort] if session[:sort]
+      params[:ratings] = session[:ratings] if session[:ratings]
+      params[:commit] = 'Redirect'
+      redirect_to movies_path(params)
+    end
+
     @params = params
 
     Movie::ratings.each {|x|
@@ -29,16 +42,6 @@ class MoviesController < ApplicationController
     end
 
     @table_classes[params[:sort]] = 'hilite' if params[:sort]
-    # @title_class = @release_class = nil
-    # if params[:sort] == 'title' then
-    #   @movies.sort! {|x, y| x.title.to_s <=> y.title.to_s}
-    #   @title_class = 'hilite'
-    # end
-    # if params[:sort] == 'release_date' then
-    #   @movies.sort! {|x, y| x.release_date <=> y.release_date}
-    #   @release_class = 'hilite'
-    # end
-
   end
 
   def new
